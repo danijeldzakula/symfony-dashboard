@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User | Dashbaord{% endblock %}
+
+{% block body %}
+    <section class="section section-edit-user">
+        <div class="section-scroll section-border">
+            <div class="grid section-column">
+                <div class="sidebar">
+                    <div class="section-scroll">
+                        <div class="view-block">
+                            <div class="grid-between mb-30">
+                                <a href="{{ path('dashboard-users') }}" class="link link-icon" title="Back to Users">
+                                    <span class="icon icon-back" style="background-image: url('{{ asset('img/icon/icon-back.png') }}');"></span>
+                                </a>                              
+                            </div>
+                            <img class="img-avatar" alt="{{ user.firstName }} {{ user.lastName }}" src="{{ asset(user.avatar) }}" />
+                            <h3 class="title text-center">{{ user.firstName }} {{ user.lastName }}</h3>
+                            <p>
+                                <strong>Email:</strong>
+                                <span>{{ user.email }}</span>
+                            </p>
+                            <p>
+                                <strong>Role:</strong>
+                                <span>{{ user.roles[0] != "ROLE_USER" ? 'Admin' : 'User' }}</span>
+                            </p>   
+                            <p>
+                                <strong>Status:</strong>
+                                <span>{{ user.status != false ? 'Active' : 'Inactive' }}</span>
+                            </p>                
+                        </div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="section-scroll">                    
+                        <div class="form-wrapper">
+                            <h3 class="title">Edit user - {{ user.firstName }} {{ user.lastName }}</h3>
+                            {{ form_start(form) }}
+                                {{ form_widget(form, { 'attr': {'class': 'form-edit-user'} }) }}
+                                <div class="grid-between-start col-gap-4">
+                                    <button type="submit" class="btn btn-primary">{{ label|default('Update') }}</button>
+                                    <a href="{{ path('dashboard-edit-user', { id: user.id }) }}" class="btn btn-primary-outline">{{ label|default('Reset') }}</a>
+                                <div>
+                            {{ form_end(form) }}                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </section>
+{% endblock %}

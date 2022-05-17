@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% set adminAuth = is_granted('ROLE_ADMIN') %}
+{% set userAuth = is_granted('ROLE_USER') %}
+
+{% block title %}Account | Dashbaord{% endblock %}
+
+{% block body %}
+    <section class="section section-account">
+        <div class="section-scroll section-border">
+            <div class="grid section-column">
+                <div class="sidebar">
+                    <div class="section-scroll">
+                        <div class="view-block">
+                            <div class="grid-between mb-30">
+                                <span></span>     
+                                {% if adminAuth %}
+                                    <a href="{{ path('dashboard-edit-user', { id: app.user.id }) }}" class="link link-icon" title="Edit User">
+                                        <span class="icon icon-edit" style="background-image: url('{{ asset('img/icon/icon-edit.svg') }}');"></span>
+                                    </a> 
+                                {% else %}
+                                    <a href="{{ path('dashboard-account-edit')}}" class="link link-icon" title="Edit User">
+                                        <span class="icon icon-edit" style="background-image: url('{{ asset('img/icon/icon-edit.svg') }}');"></span>
+                                    </a>                                    
+                                {% endif %}                                                           
+                            </div>
+                            <img class="img-avatar" alt="{{ user.firstName }} {{ user.lastName }}" src="{{ asset(user.avatar) }}" />
+                            <h3 class="title text-center">{{ user.firstName }} {{ user.lastName }}</h3>
+                            <p>
+                                <strong>Email:</strong>
+                                <span>{{ user.email }}</span>
+                            </p>
+                            <p>
+                                <strong>Role:</strong>
+                                <span>{{ user.roles[0] != "ROLE_USER" ? 'Admin' : 'User' }}</span>
+                            </p>   
+                            <p>
+                                <strong>Status:</strong>
+                                <span>{{ user.status != false ? 'Active' : 'Inactive' }}</span>
+                            </p>
+
+                            <button class="btn btn-primary toggle-modal" title="Insert Hours" data-toggle="insert-hours">Insert Hours</button>  
+                        </div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="section-scroll">                    
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr class="gradient-bg table-head-sticky">
+                                        <th>Developer Name</th>
+                                        <th>Task name</th>
+                                        <th>Description name</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for task in tasks %}
+                                        <tr>
+                                            <td>{{ task.user.firstName }} {{ task.user.lastName }}</td>
+                                            <td>{{ task.name }}</td>
+                                            <td>{{ task.description }}</td>
+                                            <td>{{ task.month|date("Y-m-d") }}</td>
+                                            <td>{{ task.time|date('H:i:s') }}</td>
+                                        </tr>
+
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="5">
+                                                    <h2 class="mt-20 text-center">No result</h2>
+                                                </td>
+                                            </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+        {# Insert hours - (modal) #}
+        <div class="modal-overlay" data-toggle-selector="insert-hours">
+            <div class="modal modal-center" data-inner="insert-hours">
+                <form class="form form-insert-hours" method="POST" action="{{ path('dashboard-account') }}">            
+                    <h3 class="text-center">Inset hours</h3>
+                    {{ form_start(form)}}
+                        {{ form_widget(form) }}
+                        
+                        <div class="col-2 col-gap-4">
+                            <button type="submit" class="btn btn-primary">Inset hours</button>
+                            <button type="button" class="btn btn-primary-outline modal-close" data-toggle-close="insert-hours">Cancel</button>
+                        </div>
+                    {{ form_end(form) }}
+                </form>
+            </div>
+        </div>
+
+    </section>
+{% endblock %}

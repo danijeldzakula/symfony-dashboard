@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Users | Dashbaord{% endblock %}
+
+{% block body %}
+    <section class="section section-users">
+        {# View all users (table) #}
+        <div class="section-scroll section-border">
+            <header class="section-header">
+                <form class="search-bar" action="{{ path('dashboard-users') }}" method="GET">
+                    <div class="form-group">
+                        <input type="text" name="_search" class="form-control" placeholder="Search..." required />
+                    </div>
+                    <button class="btn btn-default link link-icon" type="submit">
+                        <span class="icon-search" style="background-image: url('{{ asset('img/icon/icon-search.svg') }}');"></span>
+                    </button> 
+                </form>
+
+                <button class="btn btn-primary btn link link-icon toggle-sidebar" type="button" data-toggle="add-user">Add User</button>
+            </header>
+
+            <div class="content p-20">
+                <table>
+                    <thead>
+                        <tr class="table-head-sticky">
+                            <th>Avatar</th>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>
+                                    <img class="table-avatar" alt="{{ user.firstName }} {{ user.lastName }}" src="{{ asset(user.avatar) }}" />
+                                </td>
+                                <td>{{ user.firstName }}</td>
+                                <td>{{ user.lastName }}</td>
+                                <td>
+                                    <a class="link" href="mailto:{{ user.email }}">{{ user.email }}</a>
+                                </td>
+                                <td>
+                                    {{ user.roles[0] != "ROLE_USER" ? 'Admin' : 'User' }}
+                                </td>
+                                <td>{{ user.status != false ? 'Active' : 'Inactive' }}</td>
+                                <td>
+                                    <div class="options col-3 flex-start col-gap-3">
+                                        <a class="link link-icon" href="{{ path('dashboard-edit-user', { id: user.id }) }}" title="Edit User">
+                                            <span class="icon-edit" style="background-image: url('{{ asset('img/icon/icon-edit.svg') }}');"></span>
+                                        </a>
+                                        <a class="link link-icon" href="{{ path('dashboard-view-user', { id: user.id }) }}" title="View User">
+                                            <span class="icon-view" style="background-image: url('{{ asset('img/icon/icon-eye-stroke.svg') }}');"></span>
+                                        </a>
+                                        <button class="btn link link-icon toggle-modal" title="Delete User">
+                                            <span class="icon-delete" style="background-image: url('{{ asset('img/icon/icon-trash.svg') }}');" data-toggle="{{ user.id }}"></span>
+                                        </button>          
+                                    </div>           
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="text-left">
+                                    <h2>No results</h2>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>     
+            </div>       
+        </div>
+        
+        {# Delete user (modal) #}
+        {% for user in users %}
+            <div class="modal-overlay" data-toggle-selector="{{ user.id }}">
+                <div class="modal modal-center" data-inner="{{ user.id }}">
+                    <form class="form form-delete-user" method="POST" action="{{ path('dashboard-delete-user', { id: user.id }) }}">            
+                        <h3 class="text-center">Are you sure you want to delete</h3>
+                        <h2 class="text-center">{{ user.firstName }} {{ user.lastName }}</h2>
+                        <div class="form-group" style="margin: 0;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}" />
+                        </div>
+                        <div class="col-2 col-gap-4">
+                            <button type="submit" class="btn btn-primary">Delete</button>
+                            <button type="button" class="btn btn-primary-outline modal-close" data-toggle-close="{{ user.id }}">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+
+        {# Add new user (sidebar) #}
+        <div class="sidebar-overlay" data-toggle-selector="add-user">
+            <div class="sidebar sidebar-right" data-inner="add-user">
+                <div class="section-scroll">                
+                    <div class="form-wrapper">
+                        <h2 class="text-center title">Add new user</h2>
+                        {{ form_start(form) }}
+                            {{ form_widget(form, { 'attr': {'class': 'form-add-user'} }) }}
+                            <div class="grid col-2 col-gap-4 mb-0">
+                                <button type="submit" class="btn btn-primary">{{ label|default('Create') }}</button>
+                                <button type="button" class="btn btn-primary-outline" data-toggle-close="true">{{ label|default('Cancel') }}</button>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>        
+
+    </section>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{# Edit user (sidebar) #}
+{# {% for user in users %}
+    <div class="sidebar-overlay" data-toggle-selector="{{ user.id }}">
+        <div class="sidebar sidebar-right" data-inner="{{ user.id }}">
+            <h2 class="text-center">{{ user.firstName }} {{ user.lastName }}</h2>
+            <button class="sidebar-close close" data-toggle-close="{{ user.id }}">Close</button>
+        </div>
+    </div>
+{% endfor %}  #}
+{# <button class="btn link link-icon toggle-sidebar" title="Edit User">
+    <span class="icon-edit" style="background-image: url('{{ asset('img/icon/icon-edit.svg') }}');" data-toggle="{{ user.id }}"></span>
+</button> #}

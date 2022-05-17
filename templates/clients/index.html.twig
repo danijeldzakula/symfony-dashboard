@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Clients | Dashbaord{% endblock %}
+
+{% block body %}
+    <section class="section section-clients">
+        <div class="section-scroll section-border">
+            <header class="section-header">
+                <form class="search-bar" action="{{ path('dashboard-clients') }}" method="GET">
+                    <div class="form-group">
+                        <input type="text" name="_search" class="form-control" placeholder="Search..." required />
+                    </div>
+                    <button class="btn btn-default link link-icon" type="submit">
+                        <span class="icon-search" style="background-image: url('{{ asset('img/icon/icon-search.svg') }}');"></span>
+                    </button> 
+                </form>
+
+                <button class="btn btn-primary btn link link-icon toggle-sidebar" type="button" data-toggle="add-client">Add Client</button>
+            </header>
+
+            <div class="content p-20">
+                <table>
+                    <thead>
+                        <tr class="table-head-sticky">
+                            <th>Avatar</th>
+                            <th>Client name</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in clients %}                        
+                            <tr>
+                                <td>
+                                    <img class="table-avatar" alt="{{ client.name }}" src="{{ asset(client.avatar) }}" />
+                                </td>
+                                <td>{{ client.name }}</td>
+                                <td>
+                                    <div class="options col-3 flex-start col-gap-3">
+                                        <a class="link link-icon" href="{{ path('dashboard-edit-client', { id: client.id }) }}" title="Edit Client">
+                                            <span class="icon-edit" style="background-image: url('{{ asset('img/icon/icon-edit.svg') }}');"></span>
+                                        </a>
+                                        <a class="link link-icon" href="{{ path('dashboard-view-client', { id: client.id }) }}" title="View Client">
+                                            <span class="icon-view" style="background-image: url('{{ asset('img/icon/icon-eye-stroke.svg') }}');"></span>
+                                        </a>
+                                        <button class="btn link link-icon toggle-modal" title="Delete Client">
+                                            <span class="icon-delete" style="background-image: url('{{ asset('img/icon/icon-trash.svg') }}');" data-toggle="{{ client.id }}"></span>
+                                        </button>          
+                                    </div>           
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="text-left">
+                                    <h2 class="mt-20 text-center">No results</h2>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>     
+            </div>                  
+        </div>
+
+
+        {# Delete clients (modal) #}
+        {% for client in clients %}
+            <div class="modal-overlay" data-toggle-selector="{{ client.id }}">
+                <div class="modal modal-center" data-inner="{{ client.id }}">
+                    <form class="form form-delete-client" method="POST" action="{{ path('dashboard-delete-client', { id: client.id }) }}">            
+                        <h3 class="text-center">Are you sure you want to delete</h3>
+                        <h2 class="text-center">{{ client.name }}</h2>
+                        <div class="form-group" style="margin: 0;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ client.id) }}" />
+                        </div>
+                        <div class="col-2 col-gap-4">
+                            <button type="submit" class="btn btn-primary">Delete</button>
+                            <button type="button" class="btn btn-primary-outline modal-close" data-toggle-close="{{ client.id }}">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+
+        {# Add new client (sidebar) #}
+        <div class="sidebar-overlay" data-toggle-selector="add-client">
+            <div class="sidebar sidebar-right" data-inner="add-client">
+                <div class="section-scroll">
+                    <div class="form-wrapper">
+                        <h2 class="text-center title">Add new client</h2>
+                        {{ form_start(form) }}
+                            {{ form_widget(form, { 'attr': {'class': 'form-add-client'} }) }}
+                            <div class="grid col-2 col-gap-4 mb-0">
+                                <button type="submit" class="btn btn-primary">{{ label|default('Create') }}</button>
+                                <button type="button" class="btn btn-primary-outline" data-toggle-close="true">{{ label|default('Cancel') }}</button>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>           
+    </section>
+{% endblock %}

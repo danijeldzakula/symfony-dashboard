@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}View Client | Dashbaord{% endblock %}
+
+{% block body %}
+    <section class="section section-view-client">
+        <div class="section-scroll section-border">
+            <div class="grid section-column">
+                <div class="sidebar">
+                    <div class="section-scroll">
+                        <div class="view-block">
+                            <div class="grid-between mb-30">
+                                <a href="{{ path('dashboard-clients') }}" class="link link-icon" title="Back to Clients">
+                                    <span class="icon icon-back" style="background-image: url('{{ asset('img/icon/icon-back.png') }}');"></span>
+                                </a> 
+
+                                <a href="{{ path('dashboard-edit-client', { id: client.id }) }}" class="link link-icon" title="Edit Client">
+                                    <span class="icon icon-edit" style="background-image: url('{{ asset('img/icon/icon-edit.svg') }}');"></span>
+                                </a>                                                              
+                            </div>
+                            <img class="img-avatar" alt="{{ client.name }}" src="{{ asset(client.avatar) }}" />
+                            <h3 class="title text-center">{{ client.name }}</h3>
+                            <p>
+                                <strong>Email:</strong>
+                                <span>{{ client.email }}</span>
+                            </p>               
+                        </div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="section-scroll">
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr class="gradient-bg table-head-sticky">
+                                        <th>Developer Name</th>
+                                        <th>Task name</th>
+                                        <th>Description name</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for task in tasks %}
+                                        <tr>
+                                            <td>{{ task.user.firstName }} {{ task.user.lastName }}</td>
+                                            <td>{{ task.name }}</td>
+                                            <td>{{ task.description }}</td>
+                                            <td>{{ task.month|date("Y-m-d") }}</td>
+                                            <td>{{ task.time|date('H:i:s') }}</td>
+                                        </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="5">
+                                                    <h2 class="mt-20 text-center">No result</h2>
+                                                </td>
+                                            </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Client | Dashbaord{% endblock %}
+
+{% block body %}
+    <section class="section section-edit-client">
+        <div class="section-scroll section-border">
+            <div class="grid section-column">
+                <div class="sidebar">
+                    <div class="section-scroll">
+                        <div class="view-block">
+                            <div class="grid-between mb-30">
+                                <a href="{{ path('dashboard-clients') }}" class="link link-icon" title="Back to Clients">
+                                    <span class="icon icon-back" style="background-image: url('{{ asset('img/icon/icon-back.png') }}');"></span>
+                                </a>                              
+                            </div>
+                            <img class="img-avatar" alt="{{ client.name }}" src="{{ asset(client.avatar) }}" />
+                            <h3 class="title text-center">{{ client.name }}</h3>
+                            <p>
+                                <strong>Email:</strong>
+                                <span>{{ client.email }}</span>
+                            </p>           
+                        </div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="section-scroll">                    
+                        <div class="form-wrapper">
+                            <h3 class="title">Edit client - {{ client.name }}</h3>
+                            {{ form_start(form) }}
+                                {{ form_widget(form, { 'attr': {'class': 'form-edit-client'} }) }}
+                                <div class="grid-between-start col-gap-4">
+                                    <button type="submit" class="btn btn-primary">{{ label|default('Update') }}</button>
+                                    <a href="{{ path('dashboard-edit-client', { id: client.id }) }}" class="btn btn-primary-outline">{{ label|default('Reset') }}</a>
+                                <div>
+                            {{ form_end(form) }}                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </section>
+{% endblock %}

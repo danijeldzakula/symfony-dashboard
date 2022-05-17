@@ -1,0 +1,24 @@
+<aside class="sidebar sidebar-left">
+    <nav class="nav">
+        <div class="nav-scroll">
+            <img class="logo-brand" alt="Logo" src="{{ asset('img/logo.png') }}">
+            <ul>
+                {% if admin %}
+                    <li>
+                        <a href="{{ path("dashboard-users") }}" class="link {{ 'dashboard-users' in route ? 'is-active' }}">Users</a>
+                    </li>   
+                    <li>
+                        <a href="{{ path("dashboard-clients") }}" class="link {{ 'dashboard-clients' in route ? 'is-active' }}">Clients</a>
+                    </li>  
+                {% endif %}                                        
+                <li>
+                    <a href="{{ path("dashboard-account") }}" class="link {{ 'dashboard-account' in route ? 'is-active' }}">Account</a>
+                </li>
+
+                <li>
+                    <a href="{{ path('dashboard-logout') }}" class="link">Log out</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</aside>

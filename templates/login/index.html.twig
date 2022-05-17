@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login | Dashbaord{% endblock %}
+
+{% block body %}
+    <section class="section section-login">
+        <div class="container">
+        
+            {% if error %}
+               {{ error.messageKey }} 
+            {% endif %}
+
+            <form class="form form-login" method="POST" action="{{ path('dashboard-login') }}">
+                <h1 class="text-center">Log in</h1>
+
+                <div class="form-group hidden">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Email: </label>
+                    <input type="email" id="username" name="_username" class="form-control" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password: </label>
+                    <input type="password" id="password" name="_password" class="form-control" required />                
+                </div>
+                
+                <button type="submit" class="btn btn-block btn-primary">Login</button>
+            </form>
+
+        </div>
+    </section>
+{% endblock %}
