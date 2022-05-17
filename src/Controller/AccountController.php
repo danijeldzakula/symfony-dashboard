@@ -26,6 +26,7 @@ class AccountController extends AbstractController
         // current log user
         $user = $security->getUser();
         $id = $security->getUser()->getId();
+        $user = $ur->findOneBy(['email' => $user->getUserIdentifier()]);
         // get all tasks from current id user
         $tasks = $ur->find($id);
         $userTasks = $tasks->getTasks();
@@ -37,12 +38,10 @@ class AccountController extends AbstractController
         $form->handleRequest($request);
 
         // form validation
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            
-            
-            $tr->add($task, true);
-            dd($tr->findAll());
+        if ($form->isSubmitted() && $form->isValid() && $request->isMethod('POST')) {
+            $newTask = $form->getData();
+            $newTask->setUser($user);
+            $tr->add($newTask, true);
 
             return $this->redirectToRoute('dashboard-account', [], Response::HTTP_SEE_OTHER);
         }
