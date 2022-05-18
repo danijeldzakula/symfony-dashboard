@@ -7,10 +7,12 @@ use App\Form\UsersType;
 use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/697868c2e3364b0c6529e42626305015', name: 'dashboard-')]
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
@@ -19,7 +21,7 @@ class UsersController extends AbstractController
     // all users
     #[Route('/users', name: 'users', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function index(Request $request, UserRepository $ur, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function index(Request $request, UserRepository $ur, UserPasswordHasherInterface $userPasswordHasher, SluggerInterface $slugger): Response
     {
         // get all users
         $users = $ur->findAll(); // findBy(['status' => true]);
@@ -28,14 +30,37 @@ class UsersController extends AbstractController
         // create form and handle request
         $form = $this->createForm(UsersType::class, $user);
         $form->handleRequest($request);
+
         // form validation
-        if($this->isGranted('ROLE_ADMIN')) {
-            if ($form->isSubmitted() && $form->isValid()) {
-                $user->setPassword($userPasswordHasher->hashPassword($user,$form->get('plainPassword')->getData()));
-                $ur->add($user, true);   
-                return $this->redirectToRoute('dashboard-users', [], Response::HTTP_SEE_OTHER);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userEdited = $form->getData();
+            // this is avatar from input
+            $avatar = $form->get('avatar')->getData();
+    
+            // added image avatar
+            if($avatar) {
+                $originalFilename = pathinfo($avatar->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $fileName = $safeFilename.'-'.uniqid().'.'.$avatar->guessExtension();
+                // move image files
+                try {
+                    $avatar->move($this->getParameter('image_avatar'), $fileName);
+                } catch (FileException $e) {
+                    return new Response("File Upload Error: $e");
+                }
+
+                // set avatar path and alt
+                $userEdited->setAvatar($fileName);    
             }
+
+            // password hasher 
+            $user->setPassword($userPasswordHasher->hashPassword($user,$form->get('plainPassword')->getData()));
+            $ur->add($user, true);      
+            
+            // view redirect
+            return $this->redirectToRoute('dashboard-users', [], Response::HTTP_SEE_OTHER);   
         }
+
         // view render
         return $this->renderForm('users/index.html.twig', [
             'users'=>$users,
