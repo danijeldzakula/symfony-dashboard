@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Account | Dashbaord{% endblock %}
+{% block title %}Edit Task Account | Dashbaord{% endblock %}
 
 {% block body %}
     <section class="section section-edit-account">
@@ -34,14 +34,14 @@
                 <div class="content">
                     <div class="section-scroll">                    
                         <div class="form-wrapper">
-                            <h3 class="title">Edit user - {{ user.firstName }} {{ user.lastName }}</h3>
+                            <h3 class="title">Edit task - {{ task.name }}</h3>
                             {{ form_start(form) }}
-                                {{ form_widget(form, { 'attr': {'class': 'form-edit-account'} }) }}
+                                {{ form_widget(form, { 'attr': {'class': 'form-account-edit-task'} }) }}
                                 <div class="grid-between-start col-gap-4">
                                     <button type="submit" class="btn btn-primary">{{ label|default('Update') }}</button>
-                                    <a href="{{ path('dashboard-account-edit') }}" class="btn btn-primary-outline">{{ label|default('Reset') }}</a>
+                                    <a href="{{ path('dashboard-account-edit-task', { id: task.id }) }}" class="btn btn-primary-outline">{{ label|default('Reset') }}</a>
                                 <div>
-                            {{ form_end(form) }}   
+                            {{ form_end(form) }}                            
                         </div>
                     </div>
                 </div>

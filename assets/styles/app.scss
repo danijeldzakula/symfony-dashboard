@@ -262,6 +262,7 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 .form-wrapper {
+    position: relative;
     & #users, #clients {
         margin-bottom: 40px;
     }
@@ -277,15 +278,19 @@ h1, h2, h3, h4, h5, h6, p {
         & label {
             margin-bottom: 7px;
         }
-        & input, select {
+        & input, select, textarea {
             padding: 10px 12px;
             border: 0;
             border-bottom: 1px solid #ccc;
             background-color: #f2f2f2;
         }
-        & label, input, select {
+        & label, input, select, textarea {
             display: block;
             width: 100%;
+        }
+
+        & textarea {
+            resize: none;
         }
     }
 }
@@ -547,6 +552,11 @@ table .options {
     border-left: 0;
 }
 
+.col-time {
+    display: grid;
+    grid-template-columns: auto 15px auto;
+}
+
 table .empty {
     width: 100%;
     border: 1px solid #ccc;
@@ -589,6 +599,11 @@ table .table-avatar {
 // modal inner 
 .modal {
     position: relative;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
     top: -20px;
     width: 480px;
     min-height: 200px;
@@ -599,6 +614,11 @@ table .table-avatar {
     transition: all 250ms ease-in;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
     border-radius: 3px;
+}
+
+.modal.max-600 {
+    position: absolute;
+    max-height: 600px;
 }
 // show modal 
 .is-show .modal {

@@ -36,12 +36,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/697868c2e3364b0c6529e42626305015/login, roles: ROLE_ADMIN }
-        # - { path: ^/697868c2e3364b0c6529e42626305015, roles: ROLE_USER }
         - { path: ^/697868c2e3364b0c6529e42626305015/login, roles: [PUBLIC_ACCESS] }
-        - { path: ^/697868c2e3364b0c6529e42626305015/users, roles: [ROLE_ADMIN] }
-        - { path: ^/697868c2e3364b0c6529e42626305015/clients, roles: [ROLE_ADMIN] }
-        - { path: ^/697868c2e3364b0c6529e42626305015/account, roles: [ROLE_USER] }
         - { path: ^/697868c2e3364b0c6529e42626305015, roles: [IS_AUTHENTICATED_FULLY] }
 
 when@test:

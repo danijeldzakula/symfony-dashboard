@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\Security;
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class AccountController extends AbstractController
 {
-    /* account page */
+    // account page
     #[Route('/account', name: 'account', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
     public function index(Request $request, Security $security, UserRepository $ur, TaskRepository $tr): Response
@@ -42,7 +42,7 @@ class AccountController extends AbstractController
             $newTask = $form->getData();
             $newTask->setUser($user);
             $tr->add($newTask, true);
-
+            // view render
             return $this->redirectToRoute('dashboard-account', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -54,7 +54,7 @@ class AccountController extends AbstractController
         ]);
     }
 
-    /* edit account edit */
+    // edit account edit
     #[Route('/account/edit', name: 'account-edit', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
     public function edit(Request $request, Security $security, UserRepository $ur): Response
@@ -80,6 +80,56 @@ class AccountController extends AbstractController
             }
         }
         // view redirect
+        return $this->redirectToRoute('dashboard-account', [], Response::HTTP_SEE_OTHER);
+    }
+
+    // edit task from current user (id)
+    #[Route('/account/edit-task/{id}', name: 'account-edit-task', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]    
+    public function editTask(Security $security, Task $task, TaskRepository $tr, Request $request): Response
+    {
+
+
+        // auth and render
+        if($this->isGranted('ROLE_USER')) {
+            // get current log user
+            $user = $security->getUser();
+
+            $form = $this->createForm(TasksType::class, $task);
+            $form->handleRequest($request);
+
+            // form validation
+            if($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $tr->add($task, true);
+                    return $this->redirectToRoute('dashboard-account', [], Response::HTTP_SEE_OTHER);
+                }
+            }     
+
+            // view render
+            return $this->renderForm('account/edit-task-account.html.twig', [
+                'user'=>$user,
+                'form'=>$form,
+                'task'=>$task,
+            ]);
+        }
+        // view redirect
+        return $this->redirectToRoute('dashboard-account', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+    // delete task from current user (id)  
+    #[Route('/account/delete-task/{id}', name: 'account-delete-task', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]    
+    public function deleteTask(Task $task, TaskRepository $tr, Request $request): Response
+    {
+        // auth
+        if($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {
+                $tr->remove($task, true);
+            }
+        }
+        // view render 
         return $this->redirectToRoute('dashboard-account', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% set adminAuth = is_granted('ROLE_ADMIN') %}
-{% set userAuth = is_granted('ROLE_USER') %}
 
 {% block title %}Account | Dashbaord{% endblock %}
 
@@ -38,7 +37,7 @@
                                 <strong>Status:</strong>
                                 <span>{{ user.status != false ? 'Active' : 'Inactive' }}</span>
                             </p>
-
+                            {% if is_granted('ROLE_DEV') %}{% endif %}
                             <button class="btn btn-primary toggle-modal" title="Insert Hours" data-toggle="insert-hours">Insert Hours</button>  
                         </div>
                     </div>
@@ -54,6 +53,7 @@
                                         <th>Description name</th>
                                         <th>Date</th>
                                         <th>Time</th>
+                                        <th>Options</th>
                                     </tr>
                                 </thead>
 
@@ -65,11 +65,20 @@
                                             <td>{{ task.description }}</td>
                                             <td>{{ task.month|date("Y-m-d") }}</td>
                                             <td>{{ task.time|date('H:i:s') }}</td>
+                                            <td class="options col-2 flex-start col-gap-3">
+                                                <a class="link link-icon" href="{{ path('dashboard-account-edit-task', { id: task.id }) }}" title="Edit Task">
+                                                    <span class="icon-edit" style="background-image: url('{{ asset('img/icon/icon-edit.svg') }}');"></span>
+                                                </a>
+            
+                                                <button class="btn link link-icon toggle-modal" title="Delete Task">
+                                                    <span class="icon-delete" style="background-image: url('{{ asset('img/icon/icon-trash.svg') }}');" data-toggle="{{ task.id }}"></span>
+                                                </button>                                            
+                                            </td>
                                         </tr>
 
                                         {% else %}
                                             <tr>
-                                                <td colspan="5">
+                                                <td colspan="6">
                                                     <h2 class="mt-20 text-center">No result</h2>
                                                 </td>
                                             </tr>
@@ -82,20 +91,46 @@
             </div>
         </div> 
 
+        {# Delete task - (modal) #}
+        {% for task in tasks %}
+            <div class="modal-overlay" data-toggle-selector="{{ task.id }}">
+                <div class="modal modal-center" data-inner="insert-hours">
+                    <form class="form form-insert-hours" method="POST" action="{{ path('dashboard-account-delete-task', { id: task.id }) }}">            
+                        <h3 class="text-center">Are you sure you want to delete</h3>
+
+                        <h2 class="text-center">{{ task.name }}</h2>
+
+                        <div class="form-group" style="margin: 0;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}" />
+                        </div>                        
+
+                        <div class="col-2 col-gap-4">
+                            <button type="submit" class="btn btn-primary">Delete task</button>
+                            <button type="button" class="btn btn-primary-outline modal-close" data-toggle-close="{{ task.id }}">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>            
+        {% endfor %}
+
         {# Insert hours - (modal) #}
         <div class="modal-overlay" data-toggle-selector="insert-hours">
-            <div class="modal modal-center" data-inner="insert-hours">
-                <form class="form form-insert-hours" method="POST" action="{{ path('dashboard-account') }}">            
-                    <h3 class="text-center">Inset hours</h3>
-                    {{ form_start(form)}}
-                        {{ form_widget(form) }}
-                        
-                        <div class="col-2 col-gap-4">
-                            <button type="submit" class="btn btn-primary">Inset hours</button>
-                            <button type="button" class="btn btn-primary-outline modal-close" data-toggle-close="insert-hours">Cancel</button>
-                        </div>
-                    {{ form_end(form) }}
-                </form>
+            <div class="modal modal-center max-600" data-inner="insert-hours">
+                <div class="section-scroll"> 
+                    <div class="form-wrapper">
+                        <form class="form form-insert-hours" method="POST" action="{{ path('dashboard-account') }}">            
+                            <h3 class="text-center">Inset hours</h3>
+                            {{ form_start(form)}}
+                                {{ form_widget(form) }}
+                                
+                                <div class="col-2 col-gap-4">
+                                    <button type="submit" class="btn btn-primary">Inset hours</button>
+                                    <button type="button" class="btn btn-primary-outline modal-close" data-toggle-close="insert-hours">Cancel</button>
+                                </div>
+                            {{ form_end(form) }}
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 

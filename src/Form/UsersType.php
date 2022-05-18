@@ -100,7 +100,7 @@ class UsersType extends AbstractType
             ])         
             ->add('roles', ChoiceType::class, [
                 'choices'=>[
-                    'User'=>'ROLE_USER',
+                    'Dev'=>'ROLE_DEV',
                     'Admin'=>'ROLE_ADMIN',
                 ],
                 'required'=>true,

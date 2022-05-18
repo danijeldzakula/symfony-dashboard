@@ -14,11 +14,11 @@ class Task
     private $id;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(onDelete: "CASCADE", nullable: false)]
     private $user;
 
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'tasks')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(onDelete: "CASCADE", nullable: false)]
     private $client;
 
     #[ORM\Column(type: 'datetime')]
