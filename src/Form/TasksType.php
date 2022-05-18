@@ -17,8 +17,17 @@ class TasksType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
+        $yearNow = (int)date('Y');
+        $yearNext = (int)date('Y', strtotime($yearNow . ' + 1 year'));
+
         $builder
-            ->add('month', DateType::class)
+            ->add('month', DateType::class, [
+                'widget' => 'choice',
+                'input' => 'datetime_immutable',
+                'years' => range($yearNow, $yearNext),
+                'widget' => 'single_text',                       
+            ])
             ->add('time', TimeType::class)
             ->add('name', TextType::class)
             ->add('description', TextareaType::class)

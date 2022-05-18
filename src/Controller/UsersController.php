@@ -42,6 +42,7 @@ class UsersController extends AbstractController
             'form'=>$form,
         ]);
     }
+    
 
     // view user
     #[Route('/user/view/{id}', name: 'view-user', methods: ['GET', 'POST'])]
@@ -57,6 +58,7 @@ class UsersController extends AbstractController
             'tasks' => $userTasks,
         ]);
     }   
+
     
     // edit user
     #[Route('/user/edit/{id}', name: 'edit-user',  methods: ['GET', 'POST'])]
