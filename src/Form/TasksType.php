@@ -23,12 +23,13 @@ class TasksType extends AbstractType
             ->add('month', DateType::class, [
                 'widget' => 'single_text',   
                 'required' => true,
+                'label' => 'Date',
             ])
             ->add('time', TimeType::class, [
                 'attr'=> [
-                    'label'=> 'Hours and Minutes',
                     'class'=>'col-time text-center',
                 ],
+                'label'=> 'Hours and Minutes',
                 'required' => true,                  
             ])
             ->add('name', TextType::class, [

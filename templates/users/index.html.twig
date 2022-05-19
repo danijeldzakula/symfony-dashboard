@@ -77,6 +77,10 @@
         {% for user in users %}
             <div class="modal-overlay" data-toggle-selector="{{ user.id }}">
                 <div class="modal modal-center" data-inner="{{ user.id }}">
+                    <button type="button" class="btn link link-icon link-modal-close modal-close" data-toggle-close="{{ user.id }}" title="Close delete user">
+                        <span class="icon-close" style="background-image: url('{{ asset('img/icon/icon-close.png') }}');"></span>
+                    </button>
+
                     <form class="form form-delete-user" method="POST" action="{{ path('dashboard-delete-user', { id: user.id }) }}">            
                         <h3 class="text-center">Are you sure you want to delete</h3>
                         <h2 class="text-center">{{ user.firstName }} {{ user.lastName }}</h2>
@@ -97,6 +101,10 @@
             <div class="sidebar sidebar-right" data-inner="add-user">
                 <div class="section-scroll">                
                     <div class="form-wrapper">
+                        <button type="button" class="btn link link-icon link-sidebar-close sidebar-close" data-toggle-close="true" title="Close add new user">
+                            <span class="icon-close" style="background-image: url('{{ asset('img/icon/icon-close.png') }}');"></span>
+                        </button>
+
                         <h2 class="text-center title">Add new user</h2>
                         {{ form_start(form) }}
                             {{ form_widget(form, { 'attr': {'class': 'form-add-user'} }) }}

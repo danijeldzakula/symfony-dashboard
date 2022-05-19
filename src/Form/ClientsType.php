@@ -4,12 +4,14 @@ namespace App\Form;
 
 use App\Entity\Client;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ClientsType extends AbstractType
 {
@@ -38,13 +40,34 @@ class ClientsType extends AbstractType
                 'class' => ''
                 ],
             ])
-            ->add('name', TextType::class)
-            ->add('email', EmailType::class)
-            ->add('payment', TextType::class)
-            ->add('bankAcc', TextType::class, [
-                'attr'=> [
-                    'placeholder'=>'',
+            ->add('name', TextType::class, [
+                'label'=> 'Client Name',
+                'required' => false, 'constraints' => [
+                    new NotBlank([
+                        'message' => '* Please enter an Client Name.'
+                    ])
+                ],                   
+            ])
+            ->add('email', EmailType::class, [
+                'required' => false, 'constraints' => [
+                    new NotBlank([
+                        'message' => '* Please enter an email.'
+                    ])
+                ],                  
+            ])
+            ->add('payment', ChoiceType::class, [
+                'choices'=> [
+                    'Dinacard'=>'dinacard',
+                    'Mastercard'=>'mastercard',
+                    'Visacard'=>'visacard',
                 ],
+                'required'=>true,
+                'multiple'=>false,
+                'expanded'=>false,                 
+            ])
+            ->add('bankAcc', TextType::class, [
+                'label'=> 'Bank Account',
+                'required'=>true,
             ])
         ;
     }

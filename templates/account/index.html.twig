@@ -94,6 +94,10 @@
         {% for task in tasks %}
             <div class="modal-overlay" data-toggle-selector="{{ task.id }}">
                 <div class="modal modal-center" data-inner="insert-hours">
+                    <button type="button" class="btn link link-icon link-modal-close modal-close" data-toggle-close="{{ user.id }}" title="Close Delete task">
+                        <span class="icon-close" style="background-image: url('{{ asset('img/icon/icon-close.png') }}');"></span>
+                    </button>
+
                     <form class="form form-insert-hours" method="POST" action="{{ path('dashboard-account-delete-task', { id: task.id }) }}">            
                         <h3 class="text-center">Are you sure you want to delete</h3>
 
@@ -117,6 +121,10 @@
             <div class="modal modal-center max-600" data-inner="insert-hours">
                 <div class="section-scroll"> 
                     <div class="form-wrapper">
+                        <button type="button" class="btn link link-icon link-modal-close modal-close" data-toggle-close="true" title="Close Insert hours">
+                            <span class="icon-close" style="background-image: url('{{ asset('img/icon/icon-close.png') }}');"></span>
+                        </button>
+
                         <form class="form form-insert-hours" method="POST" action="{{ path('dashboard-account') }}">            
                             <h3 class="text-center">Inset hours</h3>
                             {{ form_start(form)}}
@@ -124,7 +132,7 @@
                                 
                                 <div class="col-2 col-gap-4">
                                     <button type="submit" class="btn btn-primary">Inset hours</button>
-                                    <button type="button" class="btn btn-primary-outline modal-close" data-toggle-close="insert-hours">Cancel</button>
+                                    <button type="button" class="btn btn-primary-outline modal-close" data-toggle-close="true">Cancel</button>
                                 </div>
                             {{ form_end(form) }}
                         </form>

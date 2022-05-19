@@ -65,6 +65,10 @@
         {% for client in clients %}
             <div class="modal-overlay" data-toggle-selector="{{ client.id }}">
                 <div class="modal modal-center" data-inner="{{ client.id }}">
+                    <button type="button" class="btn link link-icon link-modal-close modal-close" data-toggle-close="{{ client.id }}" title="Close delete client">
+                        <span class="icon-close" style="background-image: url('{{ asset('img/icon/icon-close.png') }}');"></span>
+                    </button>
+
                     <form class="form form-delete-client" method="POST" action="{{ path('dashboard-delete-client', { id: client.id }) }}">            
                         <h3 class="text-center">Are you sure you want to delete</h3>
                         <h2 class="text-center">{{ client.name }}</h2>
@@ -84,6 +88,10 @@
         <div class="sidebar-overlay" data-toggle-selector="add-client">
             <div class="sidebar sidebar-right" data-inner="add-client">
                 <div class="section-scroll">
+                    <button type="button" class="btn link link-icon link-sidebar-close sidebar-close" data-toggle-close="true" title="Close add new client">
+                        <span class="icon-close" style="background-image: url('{{ asset('img/icon/icon-close.png') }}');"></span>
+                    </button>
+
                     <div class="form-wrapper">
                         <h2 class="text-center title">Add new client</h2>
                         {{ form_start(form) }}
