@@ -292,6 +292,43 @@ h1, h2, h3, h4, h5, h6, p {
         & textarea {
             resize: none;
         }
+
+        & .sidebar-avatar {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: auto;
+            opacity: 0;
+            display: flex;
+            place-content: center;
+
+
+        }
+    }
+}
+
+.form-add-client,
+.form-add-user {
+    & > div:first-child {
+        position: relative;
+
+        & label {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            margin: auto;
+            display: block;
+            left: 0;
+            right: 0;
+            z-index: 1;   
+            border: 2px solid #fff;
+            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+            background-color: #f2f2f2;
+            border-radius: 50%;   
+            display: flex;
+            justify-content: center;
+            align-items: center;                          
+        }    
     }
 }
 

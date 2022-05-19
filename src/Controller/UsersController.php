@@ -36,7 +36,6 @@ class UsersController extends AbstractController
             $userEdited = $form->getData();
             // this is avatar from input
             $avatar = $form->get('avatar')->getData();
-    
             // added image avatar
             if($avatar) {
                 $originalFilename = pathinfo($avatar->getClientOriginalName(), PATHINFO_FILENAME);
@@ -48,26 +47,21 @@ class UsersController extends AbstractController
                 } catch (FileException $e) {
                     return new Response("File Upload Error: $e");
                 }
-
                 // set avatar path and alt
                 $userEdited->setAvatar($fileName);    
             }
-
             // password hasher 
             $user->setPassword($userPasswordHasher->hashPassword($user,$form->get('plainPassword')->getData()));
-            $ur->add($user, true);      
-            
+            $ur->add($user, true);
             // view redirect
             return $this->redirectToRoute('dashboard-users', [], Response::HTTP_SEE_OTHER);   
         }
-
         // view render
         return $this->renderForm('users/index.html.twig', [
             'users'=>$users,
             'form'=>$form,
         ]);
     }
-    
 
     // view user
     #[Route('/user/view/{id}', name: 'view-user', methods: ['GET', 'POST'])]
@@ -82,8 +76,7 @@ class UsersController extends AbstractController
             'user' => $user, 
             'tasks' => $userTasks,
         ]);
-    }   
-
+    }
     
     // edit user
     #[Route('/user/edit/{id}', name: 'edit-user',  methods: ['GET', 'POST'])]

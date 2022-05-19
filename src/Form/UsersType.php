@@ -34,6 +34,15 @@ class UsersType extends AbstractType
                     ])
                 ],
                 'empty_data' => 'img/blank_avatar.png',
+                'attr'=> [
+                    'class'=> 'sidebar-avatar',
+                    'html5' => false,
+                ],
+                'label_html' => true,
+                'label' => 'Upload Photo',
+                'label_attr' => [
+                  'class' => ''
+                ],
             ])
             ->add('firstName', TextType::class, [
                 'required' => false, 'constraints' => [
