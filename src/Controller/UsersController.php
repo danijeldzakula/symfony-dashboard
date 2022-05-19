@@ -35,7 +35,8 @@ class UsersController extends AbstractController
     public function index(Request $request): Response
     {
         // get all users
-        $users = $this->userRepo->findAll(); // findBy(['status' => true]);
+        // NOTE: findBy(['status' => true]);
+        $users = $this->userRepo->findAll(); 
         // add new user
         $user = new User();
         // create form and handle request
@@ -63,8 +64,9 @@ class UsersController extends AbstractController
                 // set avatar
                 $userEdited->setAvatar($fileName);    
             }
-            // password hasher 
+            // set password hasher - create
             $user->setPassword($this->passwordHasher->hashPassword($user,$form->get('plainPassword')->getData()));
+            // create new user
             $this->userRepo->add($user, true);
             // view redirect
             return $this->redirectToRoute('dashboard-users', [], Response::HTTP_SEE_OTHER);   
@@ -79,10 +81,10 @@ class UsersController extends AbstractController
     // view user
     #[Route('/user/view/{id}', name: 'view-user', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function user($id, User $user, UserRepository $ur): Response
+    public function user($id, User $user): Response
     {
         // get all tasks from current id user
-        $tasks = $ur->find($id); // $tr->findBy(['user'=> $id]);
+        $tasks = $this->userRepo->find($id); // $tr->findBy(['user'=> $id]);
         $userTasks = $tasks->getTasks();
         // render view 
         return $this->render('users/view-user.html.twig', [
@@ -101,7 +103,9 @@ class UsersController extends AbstractController
         $form->handleRequest($request);
         // form validation    
         if ($form->isSubmitted() && $form->isValid()) {
+            // set password hasher - update
             $user->setPassword($this->passwordHasher->hashPassword($user,$form->get('plainPassword')->getData()));
+            // update user by - (ID)
             $this->userRepo->add($user, true);
             return $this->redirectToRoute('dashboard-users', [], Response::HTTP_SEE_OTHER);
         }
@@ -115,12 +119,13 @@ class UsersController extends AbstractController
     // delete user
     #[Route('/user/delete/{id}', name: 'delete-user',  methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function delete(User $user, Request $request, UserRepository $ur): Response
+    public function delete(User $user, Request $request): Response
     {
         // auth
         if($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-                $ur->remove($user, true);
+                // delete user by - (ID)
+                $this->userRepo->remove($user, true);
             }
         }
         // render view 

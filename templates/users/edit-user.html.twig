@@ -10,9 +10,11 @@
                     <div class="section-scroll">
                         <div class="view-block">
                             <div class="grid-between mb-30">
-                                <a href="{{ path('dashboard-users') }}" class="link link-icon" title="Back to Users">
-                                    <span class="icon icon-back" style="background-image: url('{{ asset('img/icon/icon-back.png') }}');"></span>
-                                </a>                              
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('dashboard-users') }}" class="link link-icon" title="Back to Users">
+                                        <span class="icon icon-back" style="background-image: url('{{ asset('img/icon/icon-back.png') }}');"></span>
+                                    </a>
+                                {% endif %}                      
                             </div>
                             <img class="img-avatar" alt="{{ user.firstName }} {{ user.lastName }}" src="{{ asset('/images/'~ user.avatar) }}" />
                             <h3 class="title text-center">{{ user.firstName }} {{ user.lastName }}</h3>

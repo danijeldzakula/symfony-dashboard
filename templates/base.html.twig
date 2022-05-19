@@ -30,7 +30,7 @@
 
         {# Injected content #}
         <main class="main {{ auth ? 'main-layout' }}">
-            {{ auth ? include('views/default/navbar.html.twig', { admin: admin, route: route }) }}
+            {{ auth ? include('views/default/navbar.html.twig', { admin, route }) }}
             {% block body %}{% endblock %}
         </main>
         

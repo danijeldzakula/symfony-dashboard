@@ -26,7 +26,7 @@ class ClientsController extends AbstractController
         $this->clientRepo = $clientRepo;
     }
 
-    // All clients
+    // All clients and Create new client 
     #[Route('/clients', name: 'clients',  methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function index(Request $request): Response
@@ -35,17 +35,17 @@ class ClientsController extends AbstractController
         $clients = $this->clientRepo->findAll();
         // add new client 
         $client = new Client();
+        // create form and handle request 
         $form = $this->createForm(ClientsType::class, $client);
         $form->handleRequest($request);
         // form validation
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && $request->isMethod('POST')) {
             // get data from new client
             $clientEdited = $form->getData();
             // this is avatar from input - client
             $avatar = $form->get('avatar')->getData();
             // added image avatar 
             if ($avatar) {
-
                 // image property
                 $originalFilename = pathinfo($avatar->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $this->slugger->slug($originalFilename);
@@ -59,6 +59,7 @@ class ClientsController extends AbstractController
                 // set avatar 
                 $clientEdited->setAvatar($fileName);
             }
+            // create new client
             $this->clientRepo->add($client, true);
             return $this->redirectToRoute('dashboard-clients', [], Response::HTTP_SEE_OTHER);
         }
@@ -76,6 +77,7 @@ class ClientsController extends AbstractController
     {
         // get all user from current id client
         $tasks = $this->clientRepo->find($id);
+        // find all task 
         $userTasks = $tasks->getTasks();
         // view render
         return $this->render('clients/view-client.html.twig', [
@@ -89,23 +91,21 @@ class ClientsController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function edit(Client $client, Request $request): Response 
     {
-        // auth
-        if($this->isGranted('IS_AUTHENTICATED_FULLY') && $this->isGranted('ROLE_ADMIN')) {          
-            $form = $this->createForm(ClientsType::class, $client);
-            $form->handleRequest($request);
-            // form validation
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->clientRepo->add($client, true);
-                return $this->redirectToRoute('dashboard-clients', [], Response::HTTP_SEE_OTHER);
-            }
-            // view render 
-            return $this->renderForm('clients/edit-client.html.twig', [
-                'client'=>$client,
-                'form'=>$form,
-            ]);
-        }  
-        // view redirect
-        return $this->redirectToRoute('dashboard-account', [], Response::HTTP_SEE_OTHER);
+        // create form and handle request 
+        $form = $this->createForm(ClientsType::class, $client);
+        $form->handleRequest($request);
+        // form validation
+        if ($form->isSubmitted() && $form->isValid() && $request->isMethod('POST')) {
+            // update client by - (ID)
+            $this->clientRepo->add($client, true);
+            // view redirect
+            return $this->redirectToRoute('dashboard-clients', [], Response::HTTP_SEE_OTHER);
+        }
+        // view render 
+        return $this->renderForm('clients/edit-client.html.twig', [
+            'client'=>$client,
+            'form'=>$form,
+        ]);  
     }
 
     // delete client
@@ -116,6 +116,7 @@ class ClientsController extends AbstractController
         // form validation
         if($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             if ($this->isCsrfTokenValid('delete'.$client->getId(), $request->request->get('_token'))) {
+                // delete client by - (ID)
                 $this->clientRepo->remove($client, true);
             }
         }
