@@ -18,13 +18,24 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class UsersController extends AbstractController
 {
+    private $slugger;
+    private $userRepo;
+    private $passwordHasher;
+
+    public function __construct(SluggerInterface $slugger, UserRepository $userRepo, UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->slugger = $slugger;
+        $this->userRepo = $userRepo;
+        $this->passwordHasher = $passwordHasher;
+    }
+
     // all users
     #[Route('/users', name: 'users', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function index(Request $request, UserRepository $ur, UserPasswordHasherInterface $userPasswordHasher, SluggerInterface $slugger): Response
+    public function index(Request $request): Response
     {
         // get all users
-        $users = $ur->findAll(); // findBy(['status' => true]);
+        $users = $this->userRepo->findAll(); // findBy(['status' => true]);
         // add new user
         $user = new User();
         // create form and handle request
@@ -41,7 +52,7 @@ class UsersController extends AbstractController
             if($avatar) {
                 // image property
                 $originalFilename = pathinfo($avatar->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
+                $safeFilename = $this->slugger->slug($originalFilename);
                 $fileName = $safeFilename.'-'.uniqid().'.'.$avatar->guessExtension();
                 // move image files
                 try {
@@ -53,8 +64,8 @@ class UsersController extends AbstractController
                 $userEdited->setAvatar($fileName);    
             }
             // password hasher 
-            $user->setPassword($userPasswordHasher->hashPassword($user,$form->get('plainPassword')->getData()));
-            $ur->add($user, true);
+            $user->setPassword($this->passwordHasher->hashPassword($user,$form->get('plainPassword')->getData()));
+            $this->userRepo->add($user, true);
             // view redirect
             return $this->redirectToRoute('dashboard-users', [], Response::HTTP_SEE_OTHER);   
         }
@@ -83,28 +94,22 @@ class UsersController extends AbstractController
     // edit user
     #[Route('/user/edit/{id}', name: 'edit-user',  methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function edit(Request $request, User $user, UserRepository $ur, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function edit(Request $request, User $user): Response
     {
-        //$currentPasswordHash = $user->getPassword();
-        if($this->isGranted('ROLE_ADMIN')) {
-            $form = $this->createForm(UsersType::class, $user);
-            $form->handleRequest($request);
-            // form validation
-            if($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-                if ($form->isSubmitted() && $form->isValid()) {
-                    $user->setPassword($userPasswordHasher->hashPassword($user,$form->get('plainPassword')->getData()));
-                    $ur->add($user, true);
-                    return $this->redirectToRoute('dashboard-users', [], Response::HTTP_SEE_OTHER);
-                }
-            }       
-            // view render
-            return $this->renderForm('users/edit-user.html.twig', [
-                'user'=>$user,
-                'form'=>$form,
-            ]);
+        // create form and handle request
+        $form = $this->createForm(UsersType::class, $user);
+        $form->handleRequest($request);
+        // form validation    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword($this->passwordHasher->hashPassword($user,$form->get('plainPassword')->getData()));
+            $this->userRepo->add($user, true);
+            return $this->redirectToRoute('dashboard-users', [], Response::HTTP_SEE_OTHER);
         }
-        // view redirect
-        return $this->redirectToRoute('dashboard-account', [], Response::HTTP_SEE_OTHER);
+        // view render
+        return $this->renderForm('users/edit-user.html.twig', [
+            'user'=>$user,
+            'form'=>$form,
+        ]);
     }  
 
     // delete user

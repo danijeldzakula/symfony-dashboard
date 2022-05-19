@@ -14,7 +14,7 @@
                                     <span class="icon icon-back" style="background-image: url('{{ asset('img/icon/icon-back.png') }}');"></span>
                                 </a>                              
                             </div>
-                            <img class="img-avatar" alt="{{ user.firstName }} {{ user.lastName }}" src="{{ asset(user.avatar) }}" />
+                            <img class="img-avatar" alt="{{ user.firstName }} {{ user.lastName }}" src="{{ asset('/images/' ~ user.avatar) }}" />
                             <h3 class="title text-center">{{ user.firstName }} {{ user.lastName }}</h3>
                             <p>
                                 <strong>Email:</strong>
