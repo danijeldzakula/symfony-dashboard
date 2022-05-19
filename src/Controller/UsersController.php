@@ -33,11 +33,13 @@ class UsersController extends AbstractController
 
         // form validation
         if ($form->isSubmitted() && $form->isValid()) {
+            // get data from new user
             $userEdited = $form->getData();
-            // this is avatar from input
+            // this is avatar from input - user
             $avatar = $form->get('avatar')->getData();
             // added image avatar
             if($avatar) {
+                // image property
                 $originalFilename = pathinfo($avatar->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $fileName = $safeFilename.'-'.uniqid().'.'.$avatar->guessExtension();
@@ -47,7 +49,7 @@ class UsersController extends AbstractController
                 } catch (FileException $e) {
                     return new Response("File Upload Error: $e");
                 }
-                // set avatar path and alt
+                // set avatar
                 $userEdited->setAvatar($fileName);    
             }
             // password hasher 

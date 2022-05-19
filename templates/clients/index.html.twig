@@ -31,7 +31,7 @@
                         {% for client in clients %}                        
                             <tr>
                                 <td>
-                                    <img class="table-avatar" alt="{{ client.name }}" src="{{ asset(client.avatar) }}" />
+                                    <img class="table-avatar" alt="{{ client.name }}" src="{{ asset('/images/'~ client.avatar) }}" />
                                 </td>
                                 <td>{{ client.name }}</td>
                                 <td>
