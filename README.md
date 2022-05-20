@@ -4,17 +4,15 @@
 ### Create SQL database:
 
 1. [Localhost](http://localhost/phpmyadmin) - Start wamp localhost server and create database. 
-2. Create new database with name: `users_dashboard`, or change database name but change file in `.env` inside project 30.line of code
-    - FROM - `DATABASE_URL="mysql://root:@127.0.0.1:3306/users_dashboard?serverVersion=5.7&charset=utf8mb4"` 
-    - TO - `DATABASE_URL="mysql://root:@127.0.0.1:3306/NEW_NAME_OF_DATABASE?serverVersion=5.7&charset=utf8mb4"`
+2. Inside `.env` on 30.line of code change base name - `DATABASE_URL="mysql://root:@127.0.0.1:3306/NEW_NAME_OF_DATABASE?serverVersion=5.7&charset=utf8mb4"`
 
 ### Install application:
 
 1. `composer install`
 2. `symfony console make:migration`
-3. `symfony console doctrine:migrations:migrate`
-4. `npm install --global yarn`
-5. `yarn install`
+3. `sumfony console doctrine:database:create`
+4. `symfony console doctrine:migrations:migrate`
+5. `npm install --global yarn` or `yarn install`
 
 ### Start application:
 
