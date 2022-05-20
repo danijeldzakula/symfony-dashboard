@@ -39,8 +39,8 @@ class TasksType extends AbstractType
                         'message' => '* Polje "name" je obavezno!',
                     ]),
                     new Length([
-                        'min' => 10,
-                        'minMessage' => 'Minimalan broj karaktera je 10!',
+                        'min' => 6,
+                        'minMessage' => 'Minimalan broj karaktera je 6!',
                         'max' => 4096,
                     ]),  
                 ],              
