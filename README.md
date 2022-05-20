@@ -1,6 +1,5 @@
 # Symfony Dashboard application
 
----
 
 ### Create SQL database:
 
