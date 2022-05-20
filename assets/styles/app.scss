@@ -763,3 +763,53 @@ table .table-avatar {
     font-size: 17px;
 }
 /* end / popup warning */
+
+/* show password */
+.hidden-password {
+    position: relative;
+
+    & .toggle-hidden-password {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 41px;
+        height: 41px;
+        display: grid;
+
+        & .hidden, .visible {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: 24px 24px;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+
+        & .hidden {
+            display: block;
+        } 
+        
+        & .visible {
+            display: none;
+        }        
+    }
+
+    &.is-visible {
+        & .toggle-hidden-password {
+            & .hidden {
+                display: none;
+            } 
+            
+            & .visible {
+                display: block;
+            }
+        }
+    }
+}
+
+.form-group .hidden-password .form-control {
+    padding-right: 51px;
+}
+/* end / show password */

@@ -25,7 +25,13 @@
 
                 <div class="form-group">
                     <label for="password">Password: </label>
-                    <input type="password" id="password" name="_password" class="form-control" required />                
+                    <div class="hidden-password">
+                        <input type="password" id="password" name="_password" class="form-control" data-show-password="true" required />                
+                        <span class="toggle-hidden-password" data-toggle="true">
+                            <span class="hidden" style="background-image: url({{ asset('img/icon/icon-eye_hidden.svg') }})"></span>
+                            <span class="visible" style="background-image: url({{ asset('img/icon/icon-eye.svg') }})"></span>
+                        </span>
+                    </div>
                 </div>
                 
                 <button type="submit" class="btn btn-block btn-primary">Login</button>

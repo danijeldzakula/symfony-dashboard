@@ -22,7 +22,7 @@ class Toggle {
         this.selector = document.querySelectorAll(selector);
         this.toggle = document.querySelectorAll(toggle);
     }
-    // init function
+    // init method
     init() {
         this.showElement();
         this.hideElement();
@@ -66,15 +66,13 @@ class Toggle {
             element.addEventListener('click', (event) => {
                 let targetId = event.target.dataset.toggleSelector;
                 this.toggledElement(targetId);
-
-
             }, false);
         }
     }
     // hide on escape event
     hideEscapeElement() {
         window.addEventListener('keydown', (event) => {
-            if(event.key=='Escape' || event.key=='Esc') {
+            if(event.key === 'Escape' || event.key === 'Esc') {
                 for (let element of this.toggle) {
                     element.classList.remove('is-show');
                 }
@@ -85,3 +83,40 @@ class Toggle {
 
 let toggleModal = new Toggle('.toggle-modal', '.modal-overlay').init();
 let toggleSidebar = new Toggle('.toggle-sidebar', '.sidebar-overlay').init();
+
+
+// show hidden password
+class HiddenPassword {
+    // constructor class
+    constructor(toggle) {
+        this.toggle = document.querySelectorAll(toggle);
+    }    
+
+    // init method
+    init() {
+        this.toggledElement();
+    }
+
+    toggledElement() {
+        for (let element of this.toggle) {
+            element.addEventListener('click', (event) => {
+                let buttonTarget = event.target?.closest('[data-toggle="true"]');
+                let inputTarget = element.querySelector('[data-show-password]');
+                
+                if (buttonTarget) {
+                    // toggle show element
+                    element.classList.toggle('is-visible');
+                    // toggle type of input 
+                    if (inputTarget.type === 'password') {
+                        inputTarget.type = 'text';
+                    } else {
+                        inputTarget.type = 'password';
+                    }
+                }
+
+            }, false);
+        }
+    }
+}
+
+let toggleHiddenPassword = new HiddenPassword('.hidden-password').init();

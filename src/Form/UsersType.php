@@ -68,7 +68,9 @@ class UsersType extends AbstractType
             ->add('plainPassword', PasswordType::class, [
                 'required' => false,
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
+                'attr' => [
+                    'autocomplete' => 'new-password',
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => '* Please enter a password',
@@ -154,38 +156,4 @@ class UsersType extends AbstractType
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// , [
-//     'mapped'=>true,
-//     'constraints'=>[
-//         new Length([
-//             'min'=>6,
-//             'minMessage'=>'Your password should be at least {{ limit }} characters',
-//             'max'=>4096,
-//         ]),
-//     ],
-// ]
-// ->add('submit', SubmitType::class, [
-//     'label'=>'Update',
-//     'attr'=> ['class'=>'btn btn-primary'],
-// ])  
-// ->add('button', ButtonType::class, [
-//     'label'=>'Cancel',
-//     'attr'=> [
-//         'class'=>'btn btn-primary-outline',
-//         'data-toggle-close'=>''
-//     ],
-// ])   
 # Credits - https://stackoverflow.com/questions/51744484/symfony-form-choicetype-error-array-to-string-covnersion
