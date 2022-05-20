@@ -7,11 +7,14 @@
 
 ### Install application:
 
-1. `composer install`
-2. `symfony console doctrine:database:create`
-3. `symfony console make:migration`
-4. `symfony console doctrine:migrations:migrate`
-5. `npm install --global yarn` or `yarn install`
+1. `cd PROJECT`
+2. `rm -rf migrations & mkdir migrations`
+3. `cd migrations & type nul > .gitignore & cd ..`
+4. `composer install`
+5. `symfony console doctrine:database:create`
+6. `symfony console make:migration`
+7. `symfony console doctrine:migrations:migrate`
+8. `npm install --global yarn` or `yarn install`
 
 ### Start application:
 

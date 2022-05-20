@@ -15,7 +15,7 @@ class LoginController extends AbstractController
     {
         // view redirect
         if($this->getUser()) {
-            return $this->redirectToRoute('dashboard-login');
+            return $this->redirectToRoute('dashboard-account');
         }
         // error handling
         $error = $auth->getLastAuthenticationError();

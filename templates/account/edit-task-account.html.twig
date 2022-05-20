@@ -12,7 +12,10 @@
                             <div class="grid-between mb-30">
                                 <a href="{{ path('dashboard-account') }}" class="link link-icon" title="Back to Account">
                                     <span class="icon icon-back" style="background-image: url('{{ asset('img/icon/icon-back.png') }}');"></span>
-                                </a>                              
+                                </a>      
+                                <a href="{{ path('dashboard-account-edit')}}" class="link link-icon" title="Edit User">
+                                    <span class="icon icon-edit" style="background-image: url('{{ asset('img/icon/icon-edit.svg') }}');"></span>
+                                </a>                                                        
                             </div>
                             <img class="img-avatar" alt="{{ user.firstName }} {{ user.lastName }}" src="{{ asset('/images/'~ user.avatar) }}" />
                             <h3 class="title text-center">{{ user.firstName }} {{ user.lastName }}</h3>

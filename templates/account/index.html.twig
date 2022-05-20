@@ -99,9 +99,12 @@
                     </button>
 
                     <form class="form form-insert-hours" method="POST" action="{{ path('dashboard-account-delete-task', { id: task.id }) }}">            
-                        <h3 class="text-center">Are you sure you want to delete</h3>
+                        <h3 class="text-center">
+                            <span class="block">Are you sure you want to delete</span>
+                            <span class="block">By: <span class="c-blue">{{ task.client.name }}</span></span>
+                        </h3>
 
-                        <h2 class="text-center">{{ task.name }}</h2>
+                        <h2 class="text-center mb-4">{{ task.name }}</h2>
 
                         <div class="form-group" style="margin: 0;">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}" />
